@@ -46,12 +46,18 @@ fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
 
-ax.plot(sun_x, sun_y, sun_z)
-ax.plot(earth_x, earth_y, earth_z)
-ax.plot(mars_x, mars_y, mars_z)
+ax.plot(sun_x, sun_y, sun_z, label="Sun")
+ax.plot(earth_x, earth_y, earth_z, label="Earth")
+ax.plot(mars_x, mars_y, mars_z, label="Mars")
 
-    
 
+ax.set_xlabel("km")
+ax.set_ylabel("km")
+ax.set_zlabel("km")
+ax.legend()
+
+
+plt.savefig('figures/orbits_in_3d.png', dpi=600)
 plt.show()
 
 
