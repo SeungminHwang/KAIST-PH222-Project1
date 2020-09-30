@@ -119,7 +119,7 @@ object_list = [Earth, Mars, Sun]
 x_list = []
 y_list = []
 z_list = []
-for t in range(365*24*1):#time_max):
+for t in range(time_max):
     x, y, z = Neopjuk.pos
     
     x_list.append(x)
@@ -132,15 +132,21 @@ for t in range(365*24*1):#time_max):
         obj.update(t + 1)
     Neopjuk.update()
     
-    
-    
+'''
+# For validity test
+r_f = np.array((x_list[-1], y_list[-1], z_list[-1]))
+r_i = np.array((2.296072017053462E+07, -1.509071242461759E+08,  3.343592198786885E+04))
+print(np.sum(r_f*r_i)/np.linalg.norm(r_f)/np.linalg.norm(r_i))
+print(np.arccos(np.sum(r_f*r_i)/np.linalg.norm(r_f)/np.linalg.norm(r_i)))
+print(np.linalg.norm(r_f - r_i)/np.linalg.norm(r_i))
+''' 
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
-
+n = len(x_list)
 
 ax.plot(x_list, y_list, z_list, label="Simulated Moon")
-ax.plot(earth_x, earth_y, earth_z, label= "Earth")
+ax.plot(earth_x[:n], earth_y[:n], earth_z[:n], label= "Earth")
 
 
 ax.set_xlabel("km")
