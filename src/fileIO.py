@@ -43,4 +43,27 @@ def load_data(file_name):
             vy_list.append(float(y))
             vz_list.append(float(z))
 
-    return x_list, y_list, z_list, vx_list, vy_list, vz_list
+    return np.array(x_list), np.array(y_list), np.array(z_list), np.array(vx_list), np.array(vy_list), np.array(vz_list)
+
+
+'''
+def load_time(file_name = 'data/sun_position_200701_250701.csv'):
+    
+    # For return values
+    time_list = []
+    
+    
+    with open(file_name, newline='') as csvfile:
+        reader = csv.reader(csvfile, delimiter=',', quotechar="'")
+        
+        next(reader) # skip the first line of the table
+        
+        for row in reader:
+            _, date_time, _, _, _, _, _, _, _ = row
+
+            t = 1
+            time_list.append(t)
+            print(date_time)
+
+    return time_list
+'''
