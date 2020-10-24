@@ -34,20 +34,23 @@ center_Earth = np.array([a_e, b_e])
 center_Mars = np.array([a_m, b_m])
 
 
-# temp
+# for transfer orbit information visualization
 destx_list = []
 desty_list = []
+
+r_list = []
 a_list = []
 t_list = []
+cos_list = []
 
 for i in range(num_data):
     
     # position vector
     pos_Earth = np.array([earth_x[i], earth_y[i]])
-    post_Mars = np.array([mars_x[i], mars_y[i]])
+    pos_Mars = np.array([mars_x[i], mars_y[i]])
     
     R_e_vec = pos_Earth - center_Earth
-    R_m_vec = post_Mars - center_Mars
+    R_m_vec = pos_Mars - center_Mars
     
     # values
     d = np.linalg.norm(d_vec) # d (scalar)
@@ -60,21 +63,71 @@ for i in range(num_data):
     
     # Semi-major axis of transfer orbit
     a = 0.5*R_e + 0.5*d_cos_theta + 0.5*np.sqrt(d_cos_theta*d_cos_theta + R_m*R_m - d*d)
+    a_list.append(a)
     
+    # aphelion point of transfer orbit
+    dest = pos_Earth - 2*a*(R_e_vec/R_e)
+    destx_list.append(dest[0])
+    desty_list.append(dest[1])
     
+    # transfer time
     time_transfer = (np.pi/np.sqrt(132712440041.93938))*np.sqrt(a*a*a)
-    t_list.append(time_transfer)
+    time_transfer_hr = int(np.round(time_transfer/3600))
+    t_list.append(time_transfer_hr)
     
-    if( i % 170 == 1):
-        dest = pos_Earth - 2*a*(R_e_vec/R_e)
-        destx_list.append(dest[0])
-        desty_list.append(dest[1])
+    future_idx = i + time_transfer_hr
+    if(future_idx >= num_data): # if data is not available, skip!!
+        continue
+    
+    # position and velocity of mars if transfer is done
+    pos_Mars_final = np.array((mars_x[future_idx], mars_y[future_idx]))
+    vel_Mars_final = np.array((mars_vx[future_idx], mars_vy[future_idx]))
+    
+    delta_r = np.linalg.norm(dest - pos_Mars_final)
+    r_list.append(delta_r)
+    
+    # compare how aphelion point and r_M_f is similar.
+    cos_theta = np.sum(pos_Mars_final*dest)/(np.linalg.norm(pos_Mars_final)*np.linalg.norm(dest))
+    cos_list.append(cos_theta)
+        
 
 
-plt.plot(t_list)
+# Visualization for transfer orbit information
+fig, ax = plt.subplots(2, 2)
+w = 10
+h = 10
+fig.set_size_inches(w, h)
+
+# semi major axis
+ax[0][0].plot(a_list)
+ax[0][0].set_xlabel("elapsed time (hr)")
+ax[0][0].set_ylabel("semi-major axis (km)")
+ax[0][0].set_title("Semi-major axis(a)")
+
+# transfer time in hr
+ax[0][1].plot(t_list)
+ax[0][1].set_xlabel("elapsed time (hr)")
+ax[0][1].set_ylabel("transfer time (hr)")
+ax[0][1].set_title("transfer time")
+
+# radial error
+ax[1][0].plot(r_list)
+ax[1][0].set_xlabel("elapsed time (hr)")
+ax[1][0].set_ylabel('$||\\Delta r||\;(km)$')
+ax[1][0].set_title("radial error (km)")
+
+# cos theta
+ax[1][1].plot(cos_list)
+ax[1][1].set_xlabel("elapsed time (hr)")
+ax[1][1].set_ylabel('$\\cos{\\theta}$')
+ax[1][1].set_title('$\\cos{\\theta}$')
+
+plt.subplots_adjust(left=0.1, bottom=0.1, right=0.9, top=0.9, wspace=0.2, hspace=0.2)
 plt.show()
 
-# Visualization
+
+
+# Visualization for best-fit circular orbit(for more detail, look at circularOrbit.py)
 fig, ax = plt.subplots()
 w = 10
 h = 10
