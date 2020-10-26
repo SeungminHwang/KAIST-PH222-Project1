@@ -27,5 +27,5 @@ class SolarSystemObj():
         return np.array((vx, vy, vz))
     
     def update(self, t):
-        self.pos = (self.pos_list[0][t], self.pos_list[1][t], self.pos_list[2][t])
-        self.vel = (self.vel_list[0][t], self.vel_list[1][t], self.vel_list[2][t])
+        self.pos = np.array((self.pos_list[0][t], self.pos_list[1][t], self.pos_list[2][t]))
+        self.vel = np.array((self.vel_list[0][t], self.vel_list[1][t], self.vel_list[2][t]))
