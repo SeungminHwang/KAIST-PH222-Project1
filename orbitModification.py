@@ -12,7 +12,7 @@ global_time = 0
 time_unit = 60*60 # unit time in seconds
 dt = time_unit
 time_max = 40000 # modify
-t0 = 583
+t0 = 19044
 
 # load planetary motion data from 200701 ~ 250701
 sun_x, sun_y, sun_z, sun_vx, sun_vy, sun_vz = load_data('data/sun_position_200701_250701.csv')
@@ -41,7 +41,7 @@ center_mars_x = -20594013.960874
 center_mars_y = 8575697.237335
 
 
-tangent_vel = 2.9682145826069006 * 1.3
+tangent_vel = 2.9392965764624415 * 1.17
 tangent_dir = np.array([-(b - center_earth_y), (a - center_earth_x)])
 tangent_vec = tangent_vel*tangent_dir/np.linalg.norm(tangent_dir)
 #d, e = 
@@ -51,8 +51,8 @@ print(tangent_vec)
 
 #Neopjuk = Spacecraft(a, b, c, d, e, f, m = 1, dt=dt)
 
-Neopjuk = Spacecraft(8.069940831229883E+07, -1.272178429538063E+08,  1.589095635338873E+04,
-                     2.464070719730387E+01 + tangent_vec[0],  1.587420863943363E+01 + tangent_vec[1], -3.475375992092467E-04 + 4.5,
+Neopjuk = Spacecraft(1.402143470545298E+08, -5.218328737471491E+07,  3.211646647775546E+04,
+                     9.838386925041595E+00 + tangent_vec[0],  2.781752062424732E+01 + tangent_vec[1], -2.172883230144862E-04 + 6.2,
                      m = 1,
                      dt = dt)
 
@@ -81,14 +81,14 @@ for t in range(t0, time_max):
         obj.update(t + 1)
     
     Neopjuk.update()
-    if(t == t0 + 6685): # sudden accel.
+    if(t == t0 + 6753): # sudden accel.
         vx, vy, vz = Neopjuk.vel
         
-        tangent_vel = 2.668251962667937 * 0.85
+        tangent_vel = 2.6448508875120633 * 0.82
         tangent_dir = np.array([-(Mars.pos[1] - center_mars_y), (Mars.pos[0] - center_mars_x)])
         tangent_vec = tangent_vel*tangent_dir/np.linalg.norm(tangent_dir)
         
-        Neopjuk.update_v_force(vx + tangent_vec[0], vy + tangent_vec[1], vz + 2.8)
+        Neopjuk.update_v_force(vx + tangent_vec[0], vy + tangent_vec[1], vz + 3.25)
 
 
 
@@ -97,12 +97,12 @@ for t in range(t0, time_max):
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 #n = t0 + 6685 + 1000#len(x_list)
-n = len(x_list)
+n = 40000#len(x_list)
 
 ax.plot(x_list[:n], y_list[:n], z_list[:n], label="Spacecraft")
 ax.plot(x_list[0], y_list[0], z_list[0], 'o', markersize=4, label="Ei")
-ax.plot(x_list[6684], y_list[6684], z_list[6684], 'o', markersize=4, label="Sf")
-ax.plot(mars_x[t0 + 6684], mars_y[t0 + 6684], mars_z[t0 + 6684], 'o', markersize=4, label= "M_f")
+ax.plot(x_list[6753], y_list[6753], z_list[6753], 'o', markersize=4, label="Sf")
+ax.plot(mars_x[t0 + 6753], mars_y[t0 + 6753], mars_z[t0 + 6753], 'o', markersize=4, label= "M_f")
 ax.plot(earth_x[:n], earth_y[:n], earth_z[:n], label= "Earth")
 ax.plot(mars_x[:n], mars_y[:n], mars_z[:n], label= "mars")
 
