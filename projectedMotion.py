@@ -43,6 +43,18 @@ a_list = []
 t_list = []
 cos_list = []
 
+# for the best hohmann transfer orbit
+hohmann_pos_i = 0
+hohmann_pos_f = 0
+hohmann_vel_i = 0
+hohmann_vel_f = 0
+hohmann_a = 0
+hohmann_trans_time = 0
+hohmann_ti = 0
+
+max_cos = -1e20
+
+
 for i in range(num_data):
     
     # position vector
@@ -89,7 +101,20 @@ for i in range(num_data):
     # compare how aphelion point and r_M_f is similar.
     cos_theta = np.sum(pos_Mars_final*dest)/(np.linalg.norm(pos_Mars_final)*np.linalg.norm(dest))
     cos_list.append(cos_theta)
+    
+    
+    if(max_cos < cos_theta):
+        hohmann_pos_f = dest
+        hohmann_a = a
+        hohmann_trans_time = time_transfer_hr
+        hohmann_ti = i
         
+        max_cos = cos_theta
+        
+        print(R_e, R_m)
+        
+        
+print(hohmann_pos_f, hohmann_a, hohmann_trans_time, hohmann_ti)
 
 
 # Visualization for transfer orbit information
