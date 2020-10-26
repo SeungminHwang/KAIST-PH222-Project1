@@ -37,3 +37,6 @@ class Spacecraft():
         # transition to next_state
         self.pos = next_pos
         self.vel = next_vel
+    def update_v_force(self, vx, vy, vz):
+        self.vel = np.array([vx, vy, vz])
+        
